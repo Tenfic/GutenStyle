@@ -86,6 +86,7 @@ final class GlobalStyleStore {
 		if ( false === $existing ) {
 			return add_option( self::OPTION_NAME, $document, '', false );
 		}
-		return update_option( self::OPTION_NAME, $document, false );
+		$result = update_option( self::OPTION_NAME, $document, false );
+		return $result || $document === get_option( self::OPTION_NAME, false );
 	}
 }

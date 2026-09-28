@@ -174,6 +174,28 @@ final class StyleRegistry {
 		return $output;
 	}
 
+	/**
+	 * @return array<string,array<string,mixed>>
+	 */
+	public function export_block_adapters(): array {
+		$output = [];
+		foreach ( $this->block_adapters as $name => $adapter ) {
+			$properties = [];
+			foreach ( $adapter->get_supported_properties() as $property_id ) {
+				$properties[ $property_id ] = [
+					'cssVariable'     => $adapter->get_css_variable( $property_id ),
+					'styleEnginePath' => $adapter->get_style_engine_path( $property_id ),
+				];
+			}
+
+			$output[ $name ] = [
+				'name'       => $name,
+				'properties' => $properties,
+			];
+		}
+		return $output;
+	}
+
 	private function validate_extension_id( string $id ): string {
 		if ( ! preg_match( '/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $id ) ) {
 			throw new InvalidArgumentException( 'Extension IDs must use kebab-case.' );
