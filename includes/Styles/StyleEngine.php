@@ -2,6 +2,7 @@
 namespace GutenStyle\Styles;
 
 use GutenStyle\Styles\Compiler\CssVariableCompiler;
+use GutenStyle\Styles\Compiler\WordPressStyleEngineCompiler;
 use GutenStyle\Styles\Scope\BlockStyleScope;
 use GutenStyle\Styles\Scope\GlobalStyleScope;
 use GutenStyle\Styles\Scope\PostStyleScope;
@@ -16,6 +17,7 @@ final class StyleEngine {
 	private PostStyleStore $post_store;
 	private StyleResolver $resolver;
 	private CssVariableCompiler $compiler;
+	private WordPressStyleEngineCompiler $native_compiler;
 	private EffectiveStyleService $effective_styles;
 
 	public function __construct(
@@ -30,6 +32,7 @@ final class StyleEngine {
 		$this->post_store   = $post_store;
 		$this->resolver     = new StyleResolver( $registry );
 		$this->compiler     = new CssVariableCompiler( $registry );
+		$this->native_compiler = new WordPressStyleEngineCompiler( $registry );
 		$this->effective_styles = new EffectiveStyleService(
 			$this->resolver,
 			new GlobalStyleScope( $global_store ),
@@ -60,6 +63,10 @@ final class StyleEngine {
 
 	public function compiler(): CssVariableCompiler {
 		return $this->compiler;
+	}
+
+	public function native_compiler(): WordPressStyleEngineCompiler {
+		return $this->native_compiler;
 	}
 
 	/**

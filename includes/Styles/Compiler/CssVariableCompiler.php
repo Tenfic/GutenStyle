@@ -17,7 +17,7 @@ final class CssVariableCompiler {
 	 *
 	 * @return array<string,string>
 	 */
-	public function compile( EffectiveStyle $style ): array {
+	public function compile( EffectiveStyle $style, array $excluded_properties = [] ): array {
 		$module  = $style->get_module();
 		$adapter = $this->registry->get_block_adapter( $module );
 		if ( null === $adapter ) {
@@ -26,7 +26,10 @@ final class CssVariableCompiler {
 
 		$declarations = [];
 		foreach ( $style->get_properties() as $property_id => $resolved ) {
-			if ( ! $resolved->is_resolved() ) {
+			if ( ! $resolved->is_resolved() || in_array( $property_id, $excluded_properties, true ) ) {
+				continue;
+			}
+			if ( null !== $adapter->get_style_engine_path( $property_id ) ) {
 				continue;
 			}
 
@@ -55,9 +58,9 @@ final class CssVariableCompiler {
 		return $declarations;
 	}
 
-	public function compile_declarations( EffectiveStyle $style ): string {
+	public function compile_declarations( EffectiveStyle $style, array $excluded_properties = [] ): string {
 		$output = '';
-		foreach ( $this->compile( $style ) as $variable => $value ) {
+		foreach ( $this->compile( $style, $excluded_properties ) as $variable => $value ) {
 			$output .= $variable . ':' . $value . ';';
 		}
 		return $output;

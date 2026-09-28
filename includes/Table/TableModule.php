@@ -9,10 +9,17 @@ final class TableModule implements ModuleInterface {
 	public function register(): void {
 		add_action( 'gutenstyle/register_style_properties', [ $this, 'register_properties' ] );
 		add_action( 'gutenstyle/register_block_adapters', [ $this, 'register_adapter' ] );
+		add_action( 'gutenstyle/register_style_presets', [ $this, 'register_presets' ] );
 	}
 
 	public function register_adapter( StyleRegistry $registry ): void {
 		$registry->register_block_adapter( new TableAdapter() );
+	}
+
+	public function register_presets( StyleRegistry $registry ): void {
+		foreach ( TablePresets::all() as $preset ) {
+			$registry->register_preset( $preset );
+		}
 	}
 
 	public function register_properties( StyleRegistry $registry ): void {
