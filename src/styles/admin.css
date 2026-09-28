@@ -84,15 +84,6 @@
 	border-collapse: collapse;
 }
 
-.gutenstyle-preview-frame :is(th, td) {
-	padding: 8px;
-	border: 1px solid #d8dee8;
-}
-
-.gutenstyle-preview-frame figcaption {
-	padding-block-start: 6px;
-}
-
 @media (max-width: 782px) {
 
 	.gutenstyle-control-row {
