@@ -1,0 +1,107 @@
+/*
+ * Shared Table rendering for frontend, Gutenberg, and the admin preview.
+ * Every rule requires a GutenStyle marker so native/theme Tables are untouched.
+ */
+
+.gutenstyle-table.gutenstyle-table--has-table-border-radius > table,
+.gutenstyle-editor-table.gutenstyle-table--has-table-border-radius .wp-block-table > table {
+	border-radius: var(--gutenstyle-table-border-radius);
+}
+
+.gutenstyle-table.gutenstyle-table--has-cell-padding-horizontal > table :is(th, td),
+.gutenstyle-editor-table.gutenstyle-table--has-cell-padding-horizontal .wp-block-table > table :is(th, td) {
+	padding-inline: var(--gutenstyle-table-cell-padding-x);
+}
+
+.gutenstyle-table.gutenstyle-table--has-cell-padding-vertical > table :is(th, td),
+.gutenstyle-editor-table.gutenstyle-table--has-cell-padding-vertical .wp-block-table > table :is(th, td) {
+	padding-block: var(--gutenstyle-table-cell-padding-y);
+}
+
+.gutenstyle-table.gutenstyle-table--has-cell-background-color > table :is(tbody, tfoot) > tr > :is(th, td),
+.gutenstyle-editor-table.gutenstyle-table--has-cell-background-color .wp-block-table > table :is(tbody, tfoot) > tr > :is(th, td) {
+	background-color: var(--gutenstyle-table-cell-background);
+}
+
+.gutenstyle-table.gutenstyle-table--has-cell-text-align > table :is(tbody, tfoot) > tr > :is(th, td):not([data-align]),
+.gutenstyle-editor-table.gutenstyle-table--has-cell-text-align .wp-block-table > table :is(tbody, tfoot) > tr > :is(th, td):not([data-align]) {
+	text-align: var(--gutenstyle-table-cell-text-align);
+}
+
+.gutenstyle-table.gutenstyle-table--has-cell-vertical-align > table :is(th, td),
+.gutenstyle-editor-table.gutenstyle-table--has-cell-vertical-align .wp-block-table > table :is(th, td) {
+	vertical-align: var(--gutenstyle-table-cell-vertical-align);
+}
+
+.gutenstyle-table.gutenstyle-table--has-header-background-color > table > thead > tr > :is(th, td),
+.gutenstyle-editor-table.gutenstyle-table--has-header-background-color .wp-block-table > table > thead > tr > :is(th, td) {
+	background-color: var(--gutenstyle-table-header-background);
+}
+
+.gutenstyle-table.gutenstyle-table--has-header-text-color > table > thead > tr > :is(th, td),
+.gutenstyle-editor-table.gutenstyle-table--has-header-text-color .wp-block-table > table > thead > tr > :is(th, td) {
+	color: var(--gutenstyle-table-header-color);
+}
+
+.gutenstyle-table.gutenstyle-table--has-header-font-weight > table > thead > tr > :is(th, td),
+.gutenstyle-editor-table.gutenstyle-table--has-header-font-weight .wp-block-table > table > thead > tr > :is(th, td) {
+	font-weight: var(--gutenstyle-table-header-font-weight);
+}
+
+.gutenstyle-table.gutenstyle-table--has-header-text-align > table > thead > tr > :is(th, td):not([data-align]),
+.gutenstyle-editor-table.gutenstyle-table--has-header-text-align .wp-block-table > table > thead > tr > :is(th, td):not([data-align]) {
+	text-align: var(--gutenstyle-table-header-text-align);
+}
+
+.gutenstyle-table.gutenstyle-table--has-divider-color > table :is(th, td),
+.gutenstyle-editor-table.gutenstyle-table--has-divider-color .wp-block-table > table :is(th, td) {
+	border-color: var(--gutenstyle-table-divider-color);
+}
+
+.gutenstyle-table.gutenstyle-table--striped.gutenstyle-table--has-striped-row-background-color > table > tbody > tr:nth-child(even) > :is(th, td),
+.gutenstyle-editor-table.gutenstyle-table--striped.gutenstyle-table--has-striped-row-background-color .wp-block-table > table > tbody > tr:nth-child(even) > :is(th, td) {
+	background-color: var(--gutenstyle-table-stripe-background);
+}
+
+.gutenstyle-table.gutenstyle-table--hover.gutenstyle-table--has-hover-row-background-color > table > tbody > tr:hover > :is(th, td),
+.gutenstyle-editor-table.gutenstyle-table--hover.gutenstyle-table--has-hover-row-background-color .wp-block-table > table > tbody > tr:hover > :is(th, td) {
+	background-color: var(--gutenstyle-table-hover-background);
+}
+
+.gutenstyle-table.gutenstyle-table--has-caption-text-color > figcaption,
+.gutenstyle-editor-table.gutenstyle-table--has-caption-text-color .wp-block-table > figcaption {
+	color: var(--gutenstyle-table-caption-color);
+}
+
+.gutenstyle-table.gutenstyle-table--has-caption-font-size > figcaption,
+.gutenstyle-editor-table.gutenstyle-table--has-caption-font-size .wp-block-table > figcaption {
+	font-size: var(--gutenstyle-table-caption-font-size);
+}
+
+.gutenstyle-table.gutenstyle-table--has-caption-text-align > figcaption,
+.gutenstyle-editor-table.gutenstyle-table--has-caption-text-align .wp-block-table > figcaption {
+	text-align: var(--gutenstyle-table-caption-text-align);
+}
+
+.gutenstyle-table.gutenstyle-table--has-caption-spacing-top > figcaption,
+.gutenstyle-editor-table.gutenstyle-table--has-caption-spacing-top .wp-block-table > figcaption {
+	margin-block-start: var(--gutenstyle-table-caption-spacing-top);
+}
+
+.gutenstyle-table.gutenstyle-table--has-caption-spacing-bottom > figcaption,
+.gutenstyle-editor-table.gutenstyle-table--has-caption-spacing-bottom .wp-block-table > figcaption {
+	margin-block-end: var(--gutenstyle-table-caption-spacing-bottom);
+}
+
+.gutenstyle-table.gutenstyle-table--horizontal-scroll {
+	max-width: 100%;
+	overflow-x: auto;
+	overflow-y: hidden;
+	-webkit-overflow-scrolling: touch;
+}
+
+.gutenstyle-table.gutenstyle-table--horizontal-scroll > table,
+.gutenstyle-editor-table.gutenstyle-table--horizontal-scroll .wp-block-table > table {
+	min-width: max-content;
+	width: 100%;
+}
