@@ -32,6 +32,10 @@ Create once -> inherit globally -> override per content item -> override per blo
 2. Post/Page/CPT
 3. Individual block
 
+The engine resolves these scopes property-by-property. A higher scope changes only values explicitly stored there. Reset removes an override so the lower scope becomes effective again. If GutenStyle has no value, Theme/Core remains responsible.
+
+Presets participate in the same merge and do not replace the whole inherited style object. Interfaces may therefore show both the effective value's scope and whether a preset supplied it.
+
 ## Free
 Must demonstrate the full core concept:
 - Global styling
@@ -51,3 +55,5 @@ Monetize scale and advanced workflows:
 - Premium editorial components
 - Agency workflows
 - Role controls
+
+The core registry, schemas, scope providers, resolver, compiler, storage contracts, and extension APIs remain Free. Pro consumes those public contracts as a separate add-on and does not ship a private replacement engine.

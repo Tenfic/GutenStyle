@@ -49,10 +49,11 @@ Run the checks:
 
 ```bash
 npm run typecheck
-npm run lint:js
-npm run lint:css
+npm run lint
 npm run test:unit
 ```
+
+`npm run lint` includes JavaScript/TypeScript, CSS, PHP 7.4 syntax, and TypeScript checks. PHP syntax and engine unit tests use the pinned local PHP-WASM development runtime, so a system-wide PHP installation is not required.
 
 Stop WordPress:
 
@@ -63,6 +64,7 @@ npm run env:stop
 ## Architecture
 
 Read these first:
+
 - `AGENTS.md`
 - `docs/PRODUCT.md`
 - `docs/ARCHITECTURE.md`
