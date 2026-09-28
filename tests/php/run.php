@@ -382,6 +382,26 @@ gs_test(
 );
 
 gs_test(
+	'Post meta registration exposes an explicit REST schema and edit_post authorization',
+	static function (): void {
+		$GLOBALS['gs_test_registered_meta'] = [];
+		$store = new PostStyleStore( new StyleSanitizer( gs_fixture_registry() ) );
+		$store->register_meta();
+
+		$args = $GLOBALS['gs_test_registered_meta']['post'][ PostStyleStore::META_KEY ];
+		gs_assert_same( 'object', $args['type'] );
+		gs_assert_same( true, $args['single'] );
+		gs_assert_same( true, $args['revisions_enabled'] );
+		gs_assert_same( 'object', $args['show_in_rest']['schema']['type'] );
+
+		$GLOBALS['gs_test_caps']['edit_post'] = false;
+		gs_assert_same( false, $args['auth_callback']( false, PostStyleStore::META_KEY, 42 ) );
+		$GLOBALS['gs_test_caps']['edit_post'] = true;
+		gs_assert_same( true, $args['auth_callback']( false, PostStyleStore::META_KEY, 42 ) );
+	}
+);
+
+gs_test(
 	'Free registration hooks accept an external property adapter and preset',
 	static function (): void {
 		$GLOBALS['gs_test_actions'] = [];
@@ -440,6 +460,17 @@ gs_test(
 		gs_assert_true( $error instanceof WP_Error );
 		gs_assert_same( 'gutenstyle_invalid_styles', $error->get_error_code() );
 		gs_assert_same( 400, $error->get_error_data()['status'] );
+
+		$response = $rest->update_global_styles(
+			new WP_REST_Request(
+				[
+					'version' => 1,
+					'blocks'  => [ 'example/card' => [ 'properties' => [ 'radius' => '9px' ] ] ],
+				]
+			)
+		);
+		gs_assert_true( $response instanceof WP_REST_Response );
+		gs_assert_same( '9px', $response->get_data()['blocks']['example/card']['properties']['radius'] );
 	}
 );
 
