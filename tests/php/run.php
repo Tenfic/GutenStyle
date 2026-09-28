@@ -288,6 +288,15 @@ gs_test(
 		);
 		gs_assert_same( false, $permissive->is_valid( 'display:none' ) );
 		gs_assert_same( true, $permissive->is_valid( 'system-ui, sans-serif' ) );
+		$non_negative_dimension = new PropertyDefinition(
+			'nonNegativeDimension',
+			'Non-negative dimension',
+			PropertyDefinition::TYPE_DIMENSION,
+			[ 'min' => 0 ]
+		);
+		gs_assert_same( false, $non_negative_dimension->is_valid( '-1px' ) );
+		gs_assert_same( true, $non_negative_dimension->is_valid( '0' ) );
+		gs_assert_same( true, $non_negative_dimension->is_valid( '1.5rem' ) );
 		gs_assert_throws(
 			static function (): void {
 				new PropertyDefinition(

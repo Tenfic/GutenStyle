@@ -143,7 +143,13 @@ final class PropertyDefinition {
 				if ( ! is_string( $value ) && ! is_numeric( $value ) ) {
 					return false;
 				}
-				return 1 === preg_match( '/^(?:0|-?(?:\d+|\d*\.\d+)(?:px|rem|em|%|vw|vh|vmin|vmax|ch|ex))$/', trim( (string) $value ) );
+				$dimension = trim( (string) $value );
+				if ( 1 !== preg_match( '/^(?:0|(-?(?:\d+|\d*\.\d+))(?:px|rem|em|%|vw|vh|vmin|vmax|ch|ex))$/', $dimension, $matches ) ) {
+					return false;
+				}
+				$number = '0' === $dimension ? 0.0 : (float) $matches[1];
+				return ( null === $this->minimum || $number >= $this->minimum )
+					&& ( null === $this->maximum || $number <= $this->maximum );
 			case self::TYPE_STRING:
 				if (
 					! is_string( $value )

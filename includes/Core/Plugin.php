@@ -5,6 +5,7 @@ use GutenStyle\Admin\AdminModule;
 use GutenStyle\Editor\EditorModule;
 use GutenStyle\REST\RestModule;
 use GutenStyle\Styles\StyleModule;
+use GutenStyle\Table\TableModule;
 
 final class Plugin {
 	/** @var array<object> */
@@ -12,6 +13,7 @@ final class Plugin {
 
 	public function boot(): void {
 		$this->modules = [
+			new TableModule(),
 			new StyleModule(),
 			new RestModule(),
 			new AdminModule(),
