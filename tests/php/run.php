@@ -267,6 +267,56 @@ gs_test(
 );
 
 gs_test(
+	'property definitions reject invalid constraints and scope versions',
+	static function (): void {
+		gs_assert_throws(
+			static function (): void {
+				new PropertyDefinition(
+					'broken',
+					'Broken',
+					PropertyDefinition::TYPE_STRING,
+					[ 'pattern' => '/[/' ]
+				);
+			},
+			InvalidArgumentException::class
+		);
+		gs_assert_throws(
+			static function (): void {
+				new PropertyDefinition(
+					'brokenRange',
+					'Broken range',
+					PropertyDefinition::TYPE_NUMBER,
+					[ 'min' => 10, 'max' => 1 ]
+				);
+			},
+			InvalidArgumentException::class
+		);
+		gs_assert_throws(
+			static function (): void {
+				( new StyleResolver( gs_fixture_registry() ) )->resolve(
+					'example/card',
+					new ScopeStyle( null, [], 2 ),
+					ScopeStyle::empty(),
+					ScopeStyle::empty()
+				);
+			},
+			InvalidArgumentException::class
+		);
+	}
+);
+
+gs_test(
+	'registry retrieves future component and profile definitions',
+	static function (): void {
+		$registry = new StyleRegistry();
+		$registry->register_component( 'notice', [ 'label' => 'Notice' ] );
+		$registry->register_profile( 'editorial', [ 'label' => 'Editorial' ] );
+		gs_assert_same( [ 'label' => 'Notice' ], $registry->get_component( 'notice' ) );
+		gs_assert_same( [ 'label' => 'Editorial' ], $registry->get_profile( 'editorial' ) );
+	}
+);
+
+gs_test(
 	'Block attribute reset removes only the explicit value',
 	static function (): void {
 		$sanitizer = new StyleSanitizer( gs_fixture_registry() );

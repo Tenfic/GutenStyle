@@ -54,9 +54,15 @@ final class PropertyDefinition {
 		if ( self::TYPE_ENUM === $type && [] === $allowed_values ) {
 			throw new InvalidArgumentException( 'Enum properties require allowed values.' );
 		}
+		if ( self::TYPE_ENUM === $type && count( $allowed_values ) !== count( array_filter( $allowed_values, 'is_string' ) ) ) {
+			throw new InvalidArgumentException( 'Enum allowed values must be strings.' );
+		}
 
 		if ( self::TYPE_STRING === $type && [] === $allowed_values && null === $pattern ) {
 			throw new InvalidArgumentException( 'String properties must be constrained.' );
+		}
+		if ( null !== $pattern && false === @preg_match( $pattern, '' ) ) {
+			throw new InvalidArgumentException( 'String property pattern must be a valid regular expression.' );
 		}
 
 		$default_behavior = isset( $options['default_behavior'] ) ? (string) $options['default_behavior'] : 'inherit';
@@ -80,6 +86,9 @@ final class PropertyDefinition {
 		$this->allowed_values   = $allowed_values;
 		$this->minimum          = isset( $options['min'] ) && is_numeric( $options['min'] ) ? (float) $options['min'] : null;
 		$this->maximum          = isset( $options['max'] ) && is_numeric( $options['max'] ) ? (float) $options['max'] : null;
+		if ( null !== $this->minimum && null !== $this->maximum && $this->minimum > $this->maximum ) {
+			throw new InvalidArgumentException( 'Style property minimum cannot exceed its maximum.' );
+		}
 		$this->responsive       = ! empty( $options['responsive'] );
 		$this->css_variables    = $css_variables;
 		$this->modules          = isset( $options['modules'] ) && is_array( $options['modules'] )
@@ -120,7 +129,8 @@ final class PropertyDefinition {
 					return false;
 				}
 				$number = (float) $value;
-				return ( null === $this->minimum || $number >= $this->minimum )
+				return is_finite( $number )
+					&& ( null === $this->minimum || $number >= $this->minimum )
 					&& ( null === $this->maximum || $number <= $this->maximum );
 			case self::TYPE_DIMENSION:
 				if ( ! is_string( $value ) && ! is_numeric( $value ) ) {

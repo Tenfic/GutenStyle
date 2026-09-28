@@ -90,6 +90,20 @@ final class StyleRegistry {
 	}
 
 	/**
+	 * @return array<string,mixed>|null
+	 */
+	public function get_component( string $id ): ?array {
+		return isset( $this->components[ $id ] ) ? $this->components[ $id ] : null;
+	}
+
+	/**
+	 * @return array<string,mixed>|null
+	 */
+	public function get_profile( string $id ): ?array {
+		return isset( $this->profiles[ $id ] ) ? $this->profiles[ $id ] : null;
+	}
+
+	/**
 	 * @return array<string,PropertyDefinition>
 	 */
 	public function all_properties(): array {

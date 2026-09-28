@@ -39,6 +39,10 @@ final class StyleResolver {
 				'block'  => $block,
 			] as $source => $scope
 		) {
+			if ( ScopeStyle::VERSION !== $scope->get_version() ) {
+				throw new InvalidArgumentException( 'Scope uses an unsupported schema version.' );
+			}
+
 			$preset = $scope->get_preset();
 			if ( null !== $preset ) {
 				$definition = $this->registry->get_preset( $preset );
