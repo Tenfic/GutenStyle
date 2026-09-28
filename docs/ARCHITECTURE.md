@@ -108,8 +108,33 @@ The public `gutenstyle_style_registry()` and `gutenstyle_style_engine()` functio
 Each supported block is an adapter/module.
 Adding a block must not require rewriting Global, Post, Block, REST, or import/export systems.
 
-Milestone 1 intentionally registers no product block adapter. The first real adapter belongs to Milestone 2 after this engine is reviewed.
+### Native Table V1
+
+`TableModule` is the first product module and registers `TableAdapter` for the native `core/table` block. The adapter owns its semantic selectors, 26 supported property IDs, native WordPress Style Engine mappings, and GutenStyle custom-property mappings. Removing the module leaves the registry, scopes, resolver, storage, and compiler usable by other adapters.
+
+The Table flow is:
+
+```text
+Global Table document --+
+Post Table meta --------+--> StyleEngine::resolve( core/table )
+Block gutenstyle attr --+                 |
+                                          v
+                              native declarations + safe variables
+                                          |
+                                          v
+                              native core/table markup (unchanged)
+```
+
+Native Style Engine paths are used for table border style/width/color, table background, and cell text color. CSS custom properties cover radius, cell padding/background/alignment, header styling, row states, divider color, caption styling, and responsive mode. `TableRenderer` adds scoped marker classes and declarations only when at least one property resolves. It uses `WP_HTML_Tag_Processor` to update wrapper/table attributes without rewriting table content.
+
+The shared `table.css` has rules only beneath GutenStyle markers. The `horizontal-scroll` mode applies overflow to the existing figure wrapper and preserves the native table, section, row, header, cell, and caption elements. There is no frontend Table JavaScript.
+
+The admin preview and Gutenberg preview consume the exported registry and the same scope/preset model. Their client resolver exists for immediate unsaved feedback; PHP remains authoritative for validation, persistence, and frontend rendering.
+
+Explicit native Gutenberg attributes win for overlapping concerns. The Table adapter suppresses conflicting GutenStyle output for native border, color/background, typography, and the Core stripes style while leaving non-conflicting resolved properties in place. Per-cell native `data-align` values are excluded from the generic cell-alignment selector.
+
+Table presets are declarative registry entries: Theme Default, Clean, Bordered, Striped, Editorial, and Comparison. Theme Default has no preset properties; selecting it never snapshots or forces theme CSS. Resetting Global/Post/Block data uses the generic key-removal semantics described above.
 
 ## Performance posture
 
-Global data is one non-autoloaded option; a resolver request reads only the requested post meta and block attributes. Registry definitions are in-memory for the request. The first implementation avoids premature persistent caches, but the provider and compiler boundaries allow caching later without changing module contracts.
+Global data is one non-autoloaded option; a resolver request reads only the requested post meta and block attributes. Registry definitions are in-memory for the request. Table frontend CSS is small and conditionally enqueued when Global, Post, or serialized Block Table data is present. Admin assets remain restricted to the GutenStyle screen, and editor integrations load only in the block editor. Repeated Tables reuse the same stylesheet; only their effective declarations differ. The first implementation avoids premature persistent caches, but the provider and compiler boundaries allow caching later without changing module contracts.

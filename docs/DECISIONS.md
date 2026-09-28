@@ -50,3 +50,18 @@ Block adapters own block-specific mappings. The generic compiler emits only regi
 
 ## DEC-017
 Core PHP tests run against the plugin's minimum PHP 7.4 contract through an exact PHP-WASM development dependency. This keeps engine verification available without requiring a system-wide PHP installation or a running Docker daemon.
+
+## DEC-018
+Table V1 enhances `core/table`; it does not register a replacement block or rewrite native table content. The standard versioned `gutenstyle` attribute stores only Block-scope overrides.
+
+## DEC-019
+Table output uses native WordPress Style Engine declarations for compatible table-level border/color concerns and scoped GutenStyle variables for semantic sub-elements and states that Core cannot express. Both paths consume one resolved `EffectiveStyle`.
+
+## DEC-020
+Explicit native Gutenberg Table settings win for the same CSS concern. GutenStyle suppresses only the conflicting resolved output and preserves unrelated Global/Post/Block properties. Native per-cell alignment and Core's stripes style are not erased.
+
+## DEC-021
+Theme Default is an empty declarative Table preset. It never stores a theme snapshot or forces preset-owned CSS; inherited explicit properties, if any, continue to resolve independently.
+
+## DEC-022
+Free Table V1 includes Global, Post, and Block controls, all basic presets, live previews, and CSS-only horizontal scrolling. Sticky rows/columns, stacked layouts, custom preset building, bulk workflows, and advanced conditions are deferred rather than license-locked in Free.

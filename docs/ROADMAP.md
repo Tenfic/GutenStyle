@@ -20,15 +20,15 @@
 - Complete: PHP 7.4 unit and syntax test tooling
 
 ## Milestone 2 - Table proof of concept
-- Core table adapter using the native `core/table` block
-- Initial declarative presets
-- Global table settings
-- Post table override
-- Individual table override
-- Live editor preview
-- Frontend parity
-
-Milestone 2 remains intentionally unstarted until the generic engine is reviewed.
+- Complete: modular adapter for the native `core/table` block and 26 schema-validated V1 properties
+- Complete: Theme Default, Clean, Bordered, Striped, Editorial, and Comparison declarative presets
+- Complete: Global Table settings, visual preset browser, live unsaved preview, persistence, and resets
+- Complete: Post/Page/CPT Table scope through registered post meta
+- Complete: individual native Table Inspector controls through the generic block attribute
+- Complete: property origins and immediate inheritance fallback in Gutenberg
+- Complete: frontend native/variable output, explicit Core-setting compatibility, and CSS-only horizontal scroll
+- Complete: 16 Table tests alongside the 19 Style Engine regression tests
+- Pending environment verification: browser workflow against wp-env/default and classic themes when Docker is available
 
 ## Milestone 3
 - Heading

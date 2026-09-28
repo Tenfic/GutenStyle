@@ -57,3 +57,19 @@ Monetize scale and advanced workflows:
 - Role controls
 
 The core registry, schemas, scope providers, resolver, compiler, storage contracts, and extension APIs remain Free. Pro consumes those public contracts as a separate add-on and does not ship a private replacement engine.
+
+## Native Table V1
+
+Table V1 proves the complete product flow with WordPress's native `core/table` block:
+
+- Global Table enable/disable, visual preset choice, individual property overrides, per-property reset, whole-module reset, save state, and live preview.
+- Post/Page/public block-editor CPT Table settings stored once in `_gutenstyle_styles`, affecting every Table in that content item without rewriting blocks.
+- Individual Table Inspector settings stored in the generic `gutenstyle` block attribute, with effective preset/value origin and true inheritance resets.
+- Frontend and editor output from the existing property resolver, native Style Engine compiler, and CSS-variable compiler.
+- CSS-only horizontal scrolling that preserves native table semantics.
+
+Supported V1 concerns are container border/style/width/color/radius/background; cell padding, text/background, and alignment; header background/text/weight/alignment; stripes, hover, and dividers; caption color/size/alignment/spacing; and native or horizontal-scroll responsive behavior.
+
+Built-in Free presets are Theme Default, Clean, Bordered, Striped, Editorial, and Comparison. Presets define only GutenStyle-owned properties, so unspecified concerns continue inheriting.
+
+Table V1 intentionally excludes sticky headers/columns, stacked mobile transformations, conditional columns, custom preset building, bulk application, and advanced responsive rules. Hover is decorative and never the only carrier of meaningful information.
