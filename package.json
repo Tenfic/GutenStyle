@@ -28,6 +28,8 @@
     "antd": "5.29.3"
   },
   "devDependencies": {
+    "@php-wasm/node": "3.1.56",
+    "@php-wasm/universal": "3.1.56",
     "@tailwindcss/postcss": "4.3.3",
     "@types/react": "18.3.27",
     "@types/react-dom": "18.3.1",
@@ -45,11 +47,13 @@
     "start": "wp-scripts start --webpack-src-dir=src",
     "build": "wp-scripts build --webpack-src-dir=src",
     "typecheck": "tsc --noEmit",
-    "lint": "npm run lint:js && npm run lint:css && npm run typecheck",
+    "lint": "npm run lint:js && npm run lint:css && npm run lint:php && npm run typecheck",
     "lint:js": "wp-scripts lint-js src",
     "lint:css": "wp-scripts lint-style src/**/*.css",
+    "lint:php": "node scripts/lint-php.mjs",
     "format": "wp-scripts format",
-    "test:unit": "wp-scripts test-unit-jest --passWithNoTests",
+    "test:unit": "npm run test:php",
+    "test:php": "node scripts/run-php-tests.mjs",
     "env:start": "wp-env start",
     "env:stop": "wp-env stop",
     "plugin-zip": "wp-scripts plugin-zip"
