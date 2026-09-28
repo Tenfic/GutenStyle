@@ -1,0 +1,20 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "landingPage": "/wp-admin/admin.php?page=gutenstyle",
+  "constants": {
+    "WP_DEBUG": true,
+    "WP_DEBUG_LOG": true,
+    "WP_DEBUG_DISPLAY": false,
+    "SCRIPT_DEBUG": true
+  },
+  "steps": [
+    {
+      "step": "runPHP",
+      "code": "<?php require '/wordpress/wp-load.php'; if (!get_user_by('login', 'gutenstyle')) { $result = wp_insert_user(array('user_login' => 'gutenstyle', 'user_pass' => 'GutenStyleLocal!8888', 'user_email' => 'gutenstyle@example.test', 'display_name' => 'GutenStyle Local', 'role' => 'administrator')); if (is_wp_error($result)) { throw new Exception($result->get_error_message()); } }"
+    },
+    {
+      "step": "activatePlugin",
+      "pluginPath": "gutenstyle/gutenstyle.php"
+    }
+  ]
+}

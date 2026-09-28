@@ -46,6 +46,7 @@
     "@wordpress/i18n": "6.29.0",
     "@wordpress/plugins": "7.56.0",
     "@wordpress/scripts": "36.0.0",
+    "@wp-playground/cli": "3.1.56",
     "jest": "30.5.2",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -66,6 +67,8 @@
     "test:php": "node scripts/run-php-tests.mjs",
     "env:start": "wp-env start",
     "env:stop": "wp-env stop",
+    "env:playground:start": "wp-playground-cli start --path=. --wp=https://wordpress.org/wordpress-7.1.2.zip --php=8.3 --port=8888 --site-url=http://localhost:8888 --skip-browser --no-login --blueprint=playground/blueprint.json",
+    "env:playground:reset": "npm run env:playground:start -- --reset",
     "plugin-zip": "wp-scripts plugin-zip"
   }
 }
