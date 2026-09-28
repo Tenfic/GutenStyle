@@ -280,6 +280,14 @@ gs_test(
 			},
 			InvalidArgumentException::class
 		);
+		$permissive = new PropertyDefinition(
+			'permissive',
+			'Permissive',
+			PropertyDefinition::TYPE_STRING,
+			[ 'pattern' => '/.*/' ]
+		);
+		gs_assert_same( false, $permissive->is_valid( 'display:none' ) );
+		gs_assert_same( true, $permissive->is_valid( 'system-ui, sans-serif' ) );
 		gs_assert_throws(
 			static function (): void {
 				new PropertyDefinition(

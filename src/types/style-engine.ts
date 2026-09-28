@@ -14,6 +14,7 @@ export interface PropertyDefinition {
 	responsive: boolean;
 	cssVariables: Record< string, string >;
 	modules: string[];
+	pattern: string | null;
 }
 
 export type StyleProperties = Record< string, StyleValue >;

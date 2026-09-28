@@ -57,6 +57,13 @@ final class PropertyDefinition {
 		if ( self::TYPE_ENUM === $type && count( $allowed_values ) !== count( array_filter( $allowed_values, 'is_string' ) ) ) {
 			throw new InvalidArgumentException( 'Enum allowed values must be strings.' );
 		}
+		if ( self::TYPE_ENUM === $type ) {
+			foreach ( $allowed_values as $allowed_value ) {
+				if ( 1 !== preg_match( '/^[a-zA-Z0-9][a-zA-Z0-9_-]*$/', $allowed_value ) ) {
+					throw new InvalidArgumentException( 'Enum allowed values must be safe CSS identifiers.' );
+				}
+			}
+		}
 
 		if ( self::TYPE_STRING === $type && [] === $allowed_values && null === $pattern ) {
 			throw new InvalidArgumentException( 'String properties must be constrained.' );
@@ -138,7 +145,11 @@ final class PropertyDefinition {
 				}
 				return 1 === preg_match( '/^(?:0|-?(?:\d+|\d*\.\d+)(?:px|rem|em|%|vw|vh|vmin|vmax|ch|ex))$/', trim( (string) $value ) );
 			case self::TYPE_STRING:
-				if ( ! is_string( $value ) ) {
+				if (
+					! is_string( $value )
+					|| strlen( $value ) > 200
+					|| 1 !== preg_match( '/^[a-zA-Z0-9][a-zA-Z0-9 _,-]*$/', $value )
+				) {
 					return false;
 				}
 				if ( [] !== $this->allowed_values ) {
@@ -194,6 +205,7 @@ final class PropertyDefinition {
 			'responsive'      => $this->responsive,
 			'cssVariables'    => $this->css_variables,
 			'modules'         => $this->modules,
+			'pattern'         => $this->pattern,
 		];
 	}
 }
