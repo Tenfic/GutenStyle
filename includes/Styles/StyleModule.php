@@ -9,18 +9,15 @@ final class StyleModule implements ModuleInterface {
 	public function register(): void {
 		self::$registry = new StyleRegistry();
 
-		// First proof-of-architecture preset.
-		self::$registry->register_preset(
-			'table-clean',
-			[
-				'label'      => __( 'Clean', 'gutenstyle' ),
-				'block'      => 'core/table',
-				'properties' => [
-					'borderRadius' => '8px',
-				],
-			]
-		);
+		/**
+		 * Register property definitions before adapters and presets so presets can
+		 * be validated against the complete public schema.
+		 */
+		do_action( 'gutenstyle/register_style_properties', self::$registry );
+		do_action( 'gutenstyle/register_block_adapters', self::$registry );
+		do_action( 'gutenstyle/register_style_presets', self::$registry );
 
+		// Backward-compatible general registration hook.
 		do_action( 'gutenstyle/register_styles', self::$registry );
 	}
 
