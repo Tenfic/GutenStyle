@@ -1,4 +1,12 @@
-import { Button, Input, Select, Switch, Tag, Typography } from 'antd';
+import {
+	Button,
+	ColorPicker,
+	Input,
+	Select,
+	Switch,
+	Tag,
+	Typography,
+} from 'antd';
 import type {
 	EffectiveStyle,
 	PropertyDefinition,
@@ -68,10 +76,20 @@ const Control = ( {
 			/>
 		);
 	}
+	if ( definition.type === 'color' ) {
+		return (
+			<ColorPicker
+				value={ String( value ?? effectiveValue ?? '#ffffff' ) }
+				showText
+				onChangeComplete={ ( color ) =>
+					onChange( color.toHexString() )
+				}
+			/>
+		);
+	}
 
 	return (
 		<Input
-			type={ definition.type === 'color' ? 'color' : 'text' }
 			value={ value === undefined ? '' : String( value ) }
 			placeholder={
 				effectiveValue === null ? 'Inherit' : String( effectiveValue )
