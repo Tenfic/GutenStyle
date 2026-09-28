@@ -10,8 +10,9 @@ php.mkdirTree( '/workspace' );
 await php.mount( '/workspace', createNodeFsMountHandler( process.cwd() ) );
 php.chdir( '/workspace' );
 
-const response = await php.run( {
-	code: `<?php
+try {
+	const response = await php.run( {
+		code: `<?php
 $paths = [ 'gutenstyle.php', 'includes', 'tests/php' ];
 $files = [];
 foreach ( $paths as $path ) {
@@ -42,12 +43,15 @@ if ( 0 === $failed ) {
 	echo count( $files ) . " PHP files passed syntax validation.\\n";
 }
 exit( 0 === $failed ? 0 : 1 );`,
-} );
+	} );
 
-if ( response.text ) {
-	process.stdout.write( response.text );
+	if ( response.text ) {
+		process.stdout.write( response.text );
+	}
+	if ( response.errors ) {
+		process.stderr.write( response.errors );
+	}
+	process.exitCode = response.exitCode;
+} finally {
+	php[ Symbol.dispose ]();
 }
-if ( response.errors ) {
-	process.stderr.write( response.errors );
-}
-process.exitCode = response.exitCode;

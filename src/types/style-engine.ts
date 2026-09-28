@@ -1,12 +1,7 @@
 export type StyleValue = boolean | number | string;
 
 export type PropertyType =
-	| 'boolean'
-	| 'enum'
-	| 'color'
-	| 'number'
-	| 'dimension'
-	| 'string';
+	'boolean' | 'enum' | 'color' | 'number' | 'dimension' | 'string';
 
 export interface PropertyDefinition {
 	id: string;
@@ -17,11 +12,11 @@ export interface PropertyDefinition {
 	min: number | null;
 	max: number | null;
 	responsive: boolean;
-	cssVariables: Record<string, string>;
+	cssVariables: Record< string, string >;
 	modules: string[];
 }
 
-export type StyleProperties = Record<string, StyleValue>;
+export type StyleProperties = Record< string, StyleValue >;
 
 export interface PresetDefinition {
 	id: string;
@@ -50,7 +45,7 @@ export interface EffectiveStyle {
 	module: string;
 	preset: string | null;
 	presetSource: StyleOrigin;
-	properties: Record<string, ResolvedProperty>;
+	properties: Record< string, ResolvedProperty >;
 }
 
 export interface GutenStyleBlockAttributes {
@@ -59,5 +54,5 @@ export interface GutenStyleBlockAttributes {
 
 export interface StyleDocument {
 	version: 1;
-	blocks: Record<string, ScopeStyle>;
+	blocks: Record< string, ScopeStyle >;
 }

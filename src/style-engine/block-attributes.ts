@@ -23,7 +23,10 @@ export const resetBlockProperty = (
 	const properties = { ...attributes.gutenstyle.properties };
 	delete properties[ propertyId ];
 
-	if ( attributes.gutenstyle.preset === null && Object.keys( properties ).length === 0 ) {
+	if (
+		attributes.gutenstyle.preset === null &&
+		Object.keys( properties ).length === 0
+	) {
 		const { gutenstyle: removed, ...rest } = attributes;
 		void removed;
 		return rest;
