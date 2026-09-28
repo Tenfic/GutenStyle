@@ -9,3 +9,97 @@
 #gutenstyle-admin-app {
 	--gutenstyle-radius: 10px;
 }
+
+#gutenstyle-admin-app .gutenstyle-typography h2,
+#gutenstyle-admin-app h2.gutenstyle-typography {
+	margin-block: 0;
+}
+
+.gutenstyle-preset-card {
+	cursor: pointer;
+}
+
+.gutenstyle-preset-card.is-selected {
+	box-shadow: 0 0 0 2px #1677ff;
+}
+
+.gutenstyle-preset-swatch {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 2px;
+	height: 38px;
+	margin-block-end: 10px;
+	padding: 6px;
+	border: 1px solid;
+	border-radius: 5px;
+}
+
+.gutenstyle-preset-swatch span {
+	display: block;
+	background: rgb(255 255 255 / 72%);
+	border-radius: 2px;
+}
+
+.gutenstyle-control-list {
+	display: flex;
+	flex-direction: column;
+	border-block-start: 1px solid #e5e7eb;
+}
+
+.gutenstyle-control-row {
+	display: grid;
+	grid-template-columns: minmax(160px, 1fr) minmax(170px, 1fr);
+	gap: 16px;
+	align-items: center;
+	padding-block: 12px;
+	border-block-end: 1px solid #e5e7eb;
+}
+
+.gutenstyle-control-input {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 4px;
+	align-items: center;
+}
+
+.gutenstyle-preview-card {
+	position: sticky;
+	top: 46px;
+}
+
+.gutenstyle-preview-frame {
+	padding: clamp(12px, 3vw, 28px);
+	overflow: hidden;
+	background: #fff;
+	border: 1px solid #e2e8f0;
+	border-radius: 8px;
+}
+
+.gutenstyle-preview-frame figure {
+	margin: 0;
+}
+
+.gutenstyle-preview-frame table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.gutenstyle-preview-frame :is(th, td) {
+	padding: 8px;
+	border: 1px solid #d8dee8;
+}
+
+.gutenstyle-preview-frame figcaption {
+	padding-block-start: 6px;
+}
+
+@media (max-width: 782px) {
+
+	.gutenstyle-control-row {
+		grid-template-columns: 1fr;
+	}
+
+	.gutenstyle-preview-card {
+		position: static;
+	}
+}

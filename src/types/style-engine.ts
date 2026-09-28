@@ -57,3 +57,19 @@ export interface StyleDocument {
 	version: 1;
 	blocks: Record< string, ScopeStyle >;
 }
+
+export interface BlockAdapterPropertyDefinition {
+	cssVariable: string | null;
+	styleEnginePath: string[] | null;
+}
+
+export interface BlockAdapterDefinition {
+	name: string;
+	properties: Record< string, BlockAdapterPropertyDefinition >;
+}
+
+export interface StyleSchema {
+	properties: Record< string, PropertyDefinition >;
+	presets: Record< string, PresetDefinition >;
+	adapters: Record< string, BlockAdapterDefinition >;
+}
