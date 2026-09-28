@@ -16,6 +16,11 @@ function add_action( string $hook, callable $callback, int $priority = 10 ): voi
 	$GLOBALS['gs_test_actions'][ $hook ][ $priority ][] = $callback;
 }
 
+function add_filter( string $hook, callable $callback, int $priority = 10, int $accepted_args = 1 ): void {
+	unset( $accepted_args );
+	add_action( $hook, $callback, $priority );
+}
+
 /** @param mixed ...$args */
 function do_action( string $hook, ...$args ): void {
 	if ( ! isset( $GLOBALS['gs_test_actions'][ $hook ] ) ) {
@@ -120,6 +125,120 @@ function register_post_meta( string $post_type, string $key, array $args ): bool
 function register_rest_route( string $namespace, string $route, array $args ): bool {
 	$GLOBALS['gs_test_registered_routes'][ $namespace . $route ] = $args;
 	return true;
+}
+
+function get_the_ID(): int {
+	return isset( $GLOBALS['gs_test_current_post_id'] ) ? (int) $GLOBALS['gs_test_current_post_id'] : 0;
+}
+
+/**
+ * Minimal WordPress Style Engine test double for the paths used by the Table adapter.
+ *
+ * @param array<string,mixed> $styles
+ * @return array<string,mixed>
+ */
+function wp_style_engine_get_styles( array $styles ): array {
+	$declarations = [];
+	if ( isset( $styles['border'] ) && is_array( $styles['border'] ) ) {
+		foreach ( [ 'style', 'width', 'color' ] as $property ) {
+			if ( isset( $styles['border'][ $property ] ) ) {
+				$declarations[ 'border-' . $property ] = (string) $styles['border'][ $property ];
+			}
+		}
+	}
+	if ( isset( $styles['color']['background'] ) ) {
+		$declarations['background-color'] = (string) $styles['color']['background'];
+	}
+	if ( isset( $styles['color']['text'] ) ) {
+		$declarations['color'] = (string) $styles['color']['text'];
+	}
+
+	$css = '';
+	foreach ( $declarations as $property => $value ) {
+		$css .= $property . ':' . $value . ';';
+	}
+	return [] === $declarations ? [] : [ 'css' => $css, 'declarations' => $declarations ];
+}
+
+final class WP_HTML_Tag_Processor {
+	private string $html;
+	private int $offset = 0;
+	private int $current_start = 0;
+	private int $current_length = 0;
+	private string $current_tag = '';
+
+	public function __construct( string $html ) {
+		$this->html = $html;
+	}
+
+	/** @param array<string,string> $query */
+	public function next_tag( array $query = [] ): bool {
+		while ( preg_match( '/<([a-zA-Z0-9]+)\b[^>]*>/', $this->html, $matches, PREG_OFFSET_CAPTURE, $this->offset ) ) {
+			$tag   = strtoupper( $matches[1][0] );
+			$start = $matches[0][1];
+			$full  = $matches[0][0];
+			$this->offset = $start + strlen( $full );
+
+			if ( isset( $query['tag_name'] ) && strtoupper( $query['tag_name'] ) !== $tag ) {
+				continue;
+			}
+			if ( isset( $query['class_name'] ) ) {
+				$class_value = $this->read_attribute_from_tag( $full, 'class' );
+				$classes     = preg_split( '/\s+/', trim( (string) $class_value ) );
+				if ( ! in_array( $query['class_name'], $classes, true ) ) {
+					continue;
+				}
+			}
+
+			$this->current_start  = $start;
+			$this->current_length = strlen( $full );
+			$this->current_tag    = $full;
+			return true;
+		}
+		return false;
+	}
+
+	/** @return string|null */
+	public function get_attribute( string $name ) {
+		return $this->read_attribute_from_tag( $this->current_tag, $name );
+	}
+
+	public function add_class( string $class_name ): void {
+		$classes = preg_split( '/\s+/', trim( (string) $this->get_attribute( 'class' ) ) );
+		$classes = array_values( array_filter( $classes ) );
+		if ( ! in_array( $class_name, $classes, true ) ) {
+			$classes[] = $class_name;
+		}
+		$this->set_attribute( 'class', implode( ' ', $classes ) );
+	}
+
+	public function set_attribute( string $name, string $value ): void {
+		$escaped = htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' );
+		$pattern = '/\s+' . preg_quote( $name, '/' ) . '=("[^"]*"|\'[^\']*\')/i';
+		if ( 1 === preg_match( $pattern, $this->current_tag ) ) {
+			$updated = (string) preg_replace( $pattern, ' ' . $name . '="' . $escaped . '"', $this->current_tag, 1 );
+		} else {
+			$updated = (string) preg_replace( '/>$/', ' ' . $name . '="' . $escaped . '">', $this->current_tag, 1 );
+		}
+
+		$this->html = substr_replace( $this->html, $updated, $this->current_start, $this->current_length );
+		$this->current_tag    = $updated;
+		$this->current_length = strlen( $updated );
+		$this->offset         = $this->current_start + $this->current_length;
+	}
+
+	public function get_updated_html(): string {
+		return $this->html;
+	}
+
+	/** @return string|null */
+	private function read_attribute_from_tag( string $tag, string $name ) {
+		$pattern = '/\s+' . preg_quote( $name, '/' ) . '=("([^"]*)"|\'([^\']*)\')/i';
+		if ( 1 !== preg_match( $pattern, $tag, $matches ) ) {
+			return null;
+		}
+		return isset( $matches[2] ) && '' !== $matches[2] ? html_entity_decode( $matches[2], ENT_QUOTES, 'UTF-8' ) : html_entity_decode( $matches[3], ENT_QUOTES, 'UTF-8' );
+	}
 }
 
 class WP_REST_Request {

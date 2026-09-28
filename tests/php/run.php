@@ -491,6 +491,8 @@ gs_test(
 	}
 );
 
+require_once __DIR__ . '/table.php';
+
 $passed = 0;
 $failed = 0;
 foreach ( $GLOBALS['gs_tests'] as $name => $test ) {
