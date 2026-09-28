@@ -1,0 +1,57 @@
+{
+  "name": "gutenstyle",
+  "version": "0.1.0",
+  "description": "Visual styling system for native Gutenberg blocks.",
+  "author": "Tenfic",
+  "license": "GPL-2.0-or-later",
+  "keywords": [
+    "wordpress",
+    "gutenberg",
+    "block styles",
+    "design system"
+  ],
+  "homepage": "https://gutenstyle.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tenfic/gutenstyle.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tenfic/gutenstyle/issues"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=24.18.0 <25",
+    "npm": ">=11.16.0 <12"
+  },
+  "packageManager": "npm@11.16.0",
+  "dependencies": {
+    "antd": "5.29.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/react": "18.3.27",
+    "@types/react-dom": "18.3.1",
+    "@wordpress/element": "8.8.0",
+    "@wordpress/env": "11.16.0",
+    "@wordpress/scripts": "36.0.0",
+    "jest": "30.5.2",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3"
+  },
+  "scripts": {
+    "check:engines": "wp-scripts check-engines",
+    "start": "wp-scripts start --webpack-src-dir=src",
+    "build": "wp-scripts build --webpack-src-dir=src",
+    "typecheck": "tsc --noEmit",
+    "lint": "npm run lint:js && npm run lint:css && npm run typecheck",
+    "lint:js": "wp-scripts lint-js src",
+    "lint:css": "wp-scripts lint-style src/**/*.css",
+    "format": "wp-scripts format",
+    "test:unit": "wp-scripts test-unit-jest --passWithNoTests",
+    "env:start": "wp-env start",
+    "env:stop": "wp-env stop",
+    "plugin-zip": "wp-scripts plugin-zip"
+  }
+}
