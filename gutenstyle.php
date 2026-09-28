@@ -26,6 +26,20 @@ require_once GUTENSTYLE_PATH . 'includes/Core/Autoloader.php';
 
 \GutenStyle\Core\Autoloader::register();
 
+/**
+ * Public access to the GutenStyle Free engine for block modules and add-ons.
+ */
+function gutenstyle_style_engine(): ?\GutenStyle\Styles\StyleEngine {
+	return \GutenStyle\Styles\StyleModule::engine();
+}
+
+/**
+ * Public access to the extensible registry after GutenStyle has booted.
+ */
+function gutenstyle_style_registry(): ?\GutenStyle\Styles\StyleRegistry {
+	return \GutenStyle\Styles\StyleModule::registry();
+}
+
 add_action(
 	'plugins_loaded',
 	static function () {

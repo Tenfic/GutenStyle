@@ -10,6 +10,7 @@ final class StyleModule implements ModuleInterface {
 	private static ?StyleSanitizer $sanitizer = null;
 	private static ?GlobalStyleStore $global_store = null;
 	private static ?PostStyleStore $post_store = null;
+	private static ?StyleEngine $engine = null;
 
 	public function register(): void {
 		self::$registry = new StyleRegistry();
@@ -29,6 +30,12 @@ final class StyleModule implements ModuleInterface {
 		self::$global_store = new GlobalStyleStore( self::$sanitizer );
 		self::$post_store   = new PostStyleStore( self::$sanitizer );
 		self::$post_store->register();
+		self::$engine = new StyleEngine(
+			self::$registry,
+			self::$sanitizer,
+			self::$global_store,
+			self::$post_store
+		);
 	}
 
 	public static function registry(): ?StyleRegistry {
@@ -45,5 +52,9 @@ final class StyleModule implements ModuleInterface {
 
 	public static function post_store(): ?PostStyleStore {
 		return self::$post_store;
+	}
+
+	public static function engine(): ?StyleEngine {
+		return self::$engine;
 	}
 }
