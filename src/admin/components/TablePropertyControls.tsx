@@ -1,12 +1,4 @@
-import {
-	Button,
-	ColorPicker,
-	Input,
-	Select,
-	Switch,
-	Tag,
-	Typography,
-} from 'antd';
+import { Button, Input, Select, Switch, Tag, Typography } from 'antd';
 import type {
 	EffectiveStyle,
 	PropertyDefinition,
@@ -78,12 +70,11 @@ const Control = ( {
 	}
 	if ( definition.type === 'color' ) {
 		return (
-			<ColorPicker
+			<Input
+				type="color"
 				value={ String( value ?? effectiveValue ?? '#ffffff' ) }
-				showText
-				onChangeComplete={ ( color ) =>
-					onChange( color.toHexString() )
-				}
+				aria-label={ definition.label }
+				onChange={ ( event ) => onChange( event.target.value ) }
 			/>
 		);
 	}
