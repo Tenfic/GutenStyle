@@ -8,6 +8,30 @@
 	border-radius: var(--gutenstyle-table-border-radius);
 }
 
+/* Native Style Engine declarations are inline on the frontend.
+ * These editor-only mirrors preview unsaved scope resolution. */
+.gutenstyle-editor-table.gutenstyle-table--has-table-border-style
+.wp-block-table > table {
+	border-style: var(--gutenstyle-table-native-border-style);
+}
+
+.gutenstyle-editor-table.gutenstyle-table--has-table-border-width
+.wp-block-table > table {
+	border-width: var(--gutenstyle-table-native-border-width);
+}
+
+.gutenstyle-editor-table.gutenstyle-table--has-table-border-color .wp-block-table > table {
+	border-color: var(--gutenstyle-table-native-border-color);
+}
+
+.gutenstyle-editor-table.gutenstyle-table--has-table-background-color .wp-block-table > table {
+	background-color: var(--gutenstyle-table-native-background);
+}
+
+.gutenstyle-editor-table.gutenstyle-table--has-cell-text-color .wp-block-table > table :is(th, td) {
+	color: var(--gutenstyle-table-native-text-color);
+}
+
 .gutenstyle-table.gutenstyle-table--has-cell-padding-horizontal > table :is(th, td),
 .gutenstyle-editor-table.gutenstyle-table--has-cell-padding-horizontal .wp-block-table > table :is(th, td) {
 	padding-inline: var(--gutenstyle-table-cell-padding-x);
