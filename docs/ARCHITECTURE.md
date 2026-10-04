@@ -95,6 +95,8 @@ Bulk assigns profiles/settings to selected content instead of rewriting every bl
 Free exposes stable hooks/contracts.
 Pro behaves like a third-party extension.
 
+The Free plugin boots on `init` at priority `0`, after translations may be used and before normal Core block registration. Add-ons should attach registration callbacks before that point. The `gutenstyle/loaded` hook fires after the engine and modules are ready during the same `init` action.
+
 Current registration hooks, in order:
 
 - `gutenstyle/register_style_properties`

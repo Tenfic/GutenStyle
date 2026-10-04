@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 define( 'ABSPATH', __DIR__ . '/wordpress/' );
-define( 'GUTENSTYLE_PATH', dirname( __DIR__, 2 ) . '/' );
 
 $GLOBALS['gs_test_actions']          = [];
 $GLOBALS['gs_test_caps']             = [];
@@ -11,6 +10,18 @@ $GLOBALS['gs_test_option_autoload']  = [];
 $GLOBALS['gs_test_post_meta']        = [];
 $GLOBALS['gs_test_registered_meta']  = [];
 $GLOBALS['gs_test_registered_routes'] = [];
+$GLOBALS['gs_test_did_actions']        = [];
+$GLOBALS['gs_test_translations']       = [];
+$GLOBALS['gs_test_translation_values'] = [];
+
+function plugin_dir_path( string $file ): string {
+	return dirname( $file ) . '/';
+}
+
+function plugin_dir_url( string $file ): string {
+	unset( $file );
+	return 'https://example.test/wp-content/plugins/gutenstyle/';
+}
 
 function add_action( string $hook, callable $callback, int $priority = 10 ): void {
 	$GLOBALS['gs_test_actions'][ $hook ][ $priority ][] = $callback;
@@ -23,12 +34,19 @@ function add_filter( string $hook, callable $callback, int $priority = 10, int $
 
 /** @param mixed ...$args */
 function do_action( string $hook, ...$args ): void {
-	if ( ! isset( $GLOBALS['gs_test_actions'][ $hook ] ) ) {
-		return;
-	}
-	ksort( $GLOBALS['gs_test_actions'][ $hook ] );
-	foreach ( $GLOBALS['gs_test_actions'][ $hook ] as $callbacks ) {
-		foreach ( $callbacks as $callback ) {
+	$GLOBALS['gs_test_did_actions'][ $hook ] = ( $GLOBALS['gs_test_did_actions'][ $hook ] ?? 0 ) + 1;
+	$priority = null;
+	while ( true ) {
+		$priorities = array_keys( $GLOBALS['gs_test_actions'][ $hook ] ?? [] );
+		sort( $priorities, SORT_NUMERIC );
+		$next = array_values( array_filter( $priorities, static function ( int $candidate ) use ( $priority ): bool {
+			return null === $priority || $candidate > $priority;
+		} ) );
+		if ( [] === $next ) {
+			break;
+		}
+		$priority = $next[0];
+		foreach ( $GLOBALS['gs_test_actions'][ $hook ][ $priority ] as $callback ) {
 			$callback( ...$args );
 		}
 	}
@@ -40,8 +58,8 @@ function sanitize_text_field( $value ): string {
 }
 
 function __( string $text, string $domain = '' ): string {
-	unset( $domain );
-	return $text;
+	$GLOBALS['gs_test_translations'][] = [ 'text' => $text, 'domain' => $domain, 'init' => $GLOBALS['gs_test_did_actions']['init'] ?? 0 ];
+	return $GLOBALS['gs_test_translation_values'][ $domain ][ $text ] ?? $text;
 }
 
 function current_user_can( string $capability, ...$args ): bool {
@@ -304,8 +322,7 @@ class WP_Error {
 	}
 }
 
-require_once GUTENSTYLE_PATH . 'includes/Core/Autoloader.php';
-\GutenStyle\Core\Autoloader::register();
+require_once dirname( __DIR__, 2 ) . '/gutenstyle.php';
 
 /** @var array<string,callable> */
 $GLOBALS['gs_tests'] = [];

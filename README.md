@@ -93,10 +93,8 @@ check produced radii of `16px` (Block) and `8px` (Global), with purple Post-leve
 headers on both. Both blocks remained valid; no browser errors or failed local
 requests were recorded. Site settings and content also survived a stop/start.
 
-The PHP debug log reports an existing GutenStyle early-translation-loading notice;
-this environment setup does not change plugin initialization. First startup also
-reported nonfatal SQLite `lockWholeFile: unlock failed` messages for database
-protection files; saves and restart persistence passed afterward. Check the
+First startup reported nonfatal SQLite `lockWholeFile: unlock failed` messages
+for database protection files; saves and restart persistence passed afterward. Check the
 printed site's `wp-content/debug.log` when diagnosing PHP problems. Verification
 used the bundled default theme, not a full theme/browser or Docker/MySQL matrix.
 

@@ -41,9 +41,10 @@ function gutenstyle_style_registry(): ?\GutenStyle\Styles\StyleRegistry {
 }
 
 add_action(
-	'plugins_loaded',
+	'init',
 	static function () {
 		$plugin = new \GutenStyle\Core\Plugin();
 		$plugin->boot();
-	}
+	},
+	0
 );
